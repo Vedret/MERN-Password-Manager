@@ -1,6 +1,7 @@
 const express = require ('express');
 const connectDB=require('./config/db')
 
+
 const command=process.argv[2];
 if(command =='add'){
     console.log('Adding note')
@@ -10,6 +11,9 @@ const app = express();
 
 //Connect to db
 connectDB();
+
+//Init Middleware
+app.use(express.json({ extended: false }));
 
 app.get('/',(req,res)=>res.send('API Running'));
 
