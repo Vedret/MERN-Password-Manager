@@ -41,14 +41,34 @@ router.post('/',[auth,[
     const{vaultName, vaultTitle, vaultDescription, people} = req.body;
     //Build vault object
     const vaultFields={};
-    vaultFields.vaultOwner = req.user
+    //vaultFields.vaultOwner={};
+    vaultFields.vaultOwner = await User.findOne({_id: req.user.id});
     if(vaultName) vaultFields.vaultName = vaultName;
     if(vaultTitle) vaultFields.vaultTitle = vaultTitle;
     if(vaultDescription) vaultFields.vaultDescription = vaultDescription;
 
-    res.send('Hello');
-    console.log(vaultFields);
-
+    //res.send('Hello');
+    //console.log(vaultFields.vaultOwner);
+    try{
+        //since we are using moonose method we need to use 'await' becouse of return of promise
+        let passwordVault = await PasswordVault.findOne({vaultName: vaultName});
+        
+        //If there is vault with name then update
+        if(passwordVault){
+            //Update
+            passwordVault = await PasswordVault.findOneAndUpdate({ vaultName: vaultName },{$set: vaultFields},{new: true});
+            return res.json(passwordVault);
+            
+        }
+            //If not found then create new one           
+            password = new PasswordVault(vaultFields);         
+            await password.save();
+            res.json(password);
+           
+    }catch(err){
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
 });
 
 module.exports = router;

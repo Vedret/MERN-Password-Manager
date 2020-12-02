@@ -3,10 +3,15 @@ const mongoose=require('mongoose');
 const PasswordVaultSchema= new mongoose.Schema({
 
     vaultName: {
-        type: String
+        type: String,
+        required:true,
+        unique:true
+
     },
     vaultTitle: {
-        type: String
+        type: String,
+        required:true
+        
     },
     
     vaultDescription: {
