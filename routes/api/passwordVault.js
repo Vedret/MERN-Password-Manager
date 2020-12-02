@@ -5,6 +5,7 @@ const { check, validationResult } = require('express-validator/check');
 
 const PasswordVault = require('../../models/PasswordVault');
 const User = require('../../models/User');
+const Profile = require('../../models/Profile');
 
 
 //@route GET api/vaults/vaultId
@@ -71,4 +72,17 @@ router.post('/',[auth,[
     }
 });
 
+//@route GET api/vaults
+//@desc GET all passwordvaults
+//@acess Private
+
+router.get('/',auth, async (req, res) => {
+    try {
+        const allpasswordVaults = await PasswordVault.find();
+        res.json(allpasswordVaults);
+    } catch (error) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+});
 module.exports = router;

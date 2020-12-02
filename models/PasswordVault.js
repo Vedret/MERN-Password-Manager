@@ -21,7 +21,7 @@ const PasswordVaultSchema= new mongoose.Schema({
        type: mongoose.Schema.Types.ObjectId,
        ref: 'user'
    },
-   people: [{
+   users: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'user'
 }]
