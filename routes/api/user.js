@@ -6,7 +6,8 @@ const jwt= require('jsonwebtoken');
 
 const { check,validationResult }=require('express-validator');
 
-const User = require('../../models/user');
+const User = require('../../models/User');
+const PasswordVault = require('../../models/PasswordVault');
 
 //@route POST api/users
 //@desc Register user
@@ -15,7 +16,7 @@ router.post('/',[
     check('name','Name is required').not().isEmpty(),
     check('email','Please include a valid email').isEmail(),
     check('password',
-    'Please enter a password with 6 or more characters').isLength({ min: 6})
+    'Please enter a password with 6 or more characters').isLength({ min: 8}).matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/, "i").withMessage('Password should be combination of one uppercase , one lower case, one special char, one digit and min 8 , max 20 char long')
 ],
 async (req,res)=>{
     const errors=validationResult(req);
@@ -24,6 +25,7 @@ async (req,res)=>{
         return res.status(400).json({ errors});
     }
 
+    //Pulling all fields from request body
     const {name, email, password }=req.body;
 
     try{
@@ -46,8 +48,9 @@ async (req,res)=>{
         avatar,
         password
     });
-    
 
+    
+    
     //Encrypt, hash the password
     const salt = await bcrypt.genSalt(10);
 
@@ -55,6 +58,15 @@ async (req,res)=>{
 
     //save the user in the db
     await user.save();
+    //create first, private password vault
+    vault = new PasswordVault();
+    vault.vaultName=name + ' private vault';
+    vault.vaultTitle = 'Private vault';
+    vault.vaultOwner = user,
+    vault.vaultDescription = 'The private vault for user ' + name,
+    vault._id=user.id 
+    await vault.save();
+    
      // Return json web token
 
      //get the payload which incudes a user id

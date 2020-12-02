@@ -19,9 +19,10 @@ app.get('/',(req,res)=>res.send('API Running'));
 
 //Define Routes
 //userRoutes=require('./routes/api/user');
-app.use('/api/users', require('./routes/api/user'));
+app.use('/api/user', require('./routes/api/user'));
 app.use('/api/auth', require('./routes/api/auth'));
 app.use('/api/profile', require('./routes/api/profile'));
+app.use('/api/vault', require('./routes/api/passwordVault'));
 //app.use('/api/posts', require('./routes/api/posts'))
 
 const PORT = process.env.PORT || 5000;
