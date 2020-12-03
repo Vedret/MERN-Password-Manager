@@ -9,7 +9,7 @@ const Profile = require('../../models/Profile');
 
 
 //@route GET api/vaults/vaultId
-//@desc GET current 
+//@desc GET password vault by Id 
 //@acess Private
 router.get('/:passwordvault_id',auth, async (req, res) => {
     try {
@@ -19,9 +19,13 @@ router.get('/:passwordvault_id',auth, async (req, res) => {
         res.json(vault);
 
         if (!vault)
-            return res.status(400).json({ msg: 'There is no vault created with this name !! ' });
+            return res.status(400).json({ msg: 'Vault not foud' });
     } catch (err) {
         console.error(err.message);
+        //check for certain type of message for non ObjectIds
+        if(err.kind == 'ObjectId'){
+            return res.status(400).json({ msg: 'Vault not foud' });
+        }
         res.status(500).send('Server error')
     }
 })
@@ -80,6 +84,23 @@ router.get('/',auth, async (req, res) => {
     try {
         const allpasswordVaults = await PasswordVault.find();
         res.json(allpasswordVaults);
+    } catch (error) {
+        console.error(err.message);
+        res.status(500).send('Server Error');
+    }
+});
+
+//@route DELETE api/vaults
+//@desc DELETE  passwordVault
+//@acess Private
+router.delete('/',auth, async (req, res) => {
+    try {
+        //Get vaulname from body to delete
+        const{vaultName} = req.body;
+
+        //Remove vault
+        await PasswordVault.findOneAndDelete({vaultName: vaultName})
+        res.json({ msg: 'Vault deleted'});
     } catch (error) {
         console.error(err.message);
         res.status(500).send('Server Error');
