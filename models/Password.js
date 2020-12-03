@@ -10,5 +10,9 @@ const PasswordSchema = new mongoose.Schema({
     expire: {
         type: Date
     },
+    passwordVault: {
+        type: Schema.Types.ObjectId,
+        ref: 'passwordVault'
+    }
    
 });
