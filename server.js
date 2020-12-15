@@ -22,8 +22,9 @@ app.get('/',(req,res)=>res.send('API Running'));
 app.use('/api/user', require('./routes/api/user'));
 app.use('/api/auth', require('./routes/api/auth'));
 app.use('/api/profile', require('./routes/api/profile'));
-app.use('/api/vault', require('./routes/api/passwordVault'));
-//app.use('/api/posts', require('./routes/api/posts'))
+app.use('/api/vault', require('./routes/api/vault'));
+app.use('/api/vault/login', require('./routes/api/login'));
+
 
 const PORT = process.env.PORT || 5000;
 

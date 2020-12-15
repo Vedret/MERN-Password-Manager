@@ -7,7 +7,7 @@ const jwt= require('jsonwebtoken');
 const { check,validationResult }=require('express-validator');
 
 const User = require('../../models/User');
-const PasswordVault = require('../../models/PasswordVault');
+const Vault = require('../../models/Vault');
 
 //@route POST api/users
 //@desc Register user
@@ -59,7 +59,7 @@ async (req,res)=>{
     //save the user in the db
     await user.save();
     //create first, private password vault
-    vault = new PasswordVault();
+    vault = new Vault();
     vault.vaultName=name + ' private vault';
     vault.vaultTitle = 'Private vault';
     vault.vaultOwner = user,

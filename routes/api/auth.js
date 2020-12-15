@@ -13,7 +13,7 @@ const User = require ('../../models/User');
 //@desc TEST route
 //@acess Public
 
-//By ading    "auth" we make this route protected
+//By ading "auth" we make this route protected
 router.get('/',auth, async (req,res)=>{
     try{
     const user = await  User.findById(req.user.id).select('-password');
@@ -49,7 +49,7 @@ async (req,res)=>{
        return  res.status(400).json({errors: [{ msg: 'Invalid credentials' }] });
     }
 
-    const isMatch= await bcrypt.compare(password,user.password);
+    const isMatch= await bcrypt.compare(password, user.password);
     if(!isMatch){
         if(!user){
             return  res.status(400).json({errors: [{ msg: 'Invalid credentials' }] });
@@ -58,7 +58,9 @@ async (req,res)=>{
      //get the payload which incudes a user id
     const payload={
         user: {
-            id: user.id
+            id: user.id,
+            role: user.role
+            
         }
     };
     //Sign the token

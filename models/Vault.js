@@ -1,6 +1,6 @@
 const mongoose=require('mongoose');
 
-const PasswordVaultSchema= new mongoose.Schema({
+const VaultSchema= new mongoose.Schema({
 
     vaultName: {
         type: String,
@@ -21,11 +21,17 @@ const PasswordVaultSchema= new mongoose.Schema({
        type: mongoose.Schema.Types.ObjectId,
        ref: 'user'
    },
-   users: [{
+   assignedTo: [{
+       
+    user:{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'user'
-}]
+}, 
+    read: { type: Boolean, default: false, required: true  },
+    write: { type: Boolean, default: false, required: true },
+    delete: { type: Boolean, default: false, required: true }
+   }]
     
 
 });
-module.exports=PasswordVault=mongoose.model('passwordVault',PasswordVaultSchema);
+module.exports=Vault=mongoose.model('Vault',VaultSchema);
